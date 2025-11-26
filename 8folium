@@ -1,0 +1,45 @@
+import folium 
+import pandas as pd
+import requests
+data={
+    'Country code':['USA','BRA','IND'],
+'Population': [123456789,24326347565868,747553565686858576]}
+df=pd.DataFrame(data)
+geojson_url='https://raw.githubusercontent.com/python-visualization/folium/main/examples/data/world-countries.json'
+geojson_data=requests.get(geojson_url).json()
+m=folium.Map(locations=[20,0],zoom_starts=2,tiles='cartodb positron')
+folium.Choropleth(
+    geo_data=geojson_data,
+    data=df,
+    columns=['Country code','Population'],
+    key_on='feature.id',
+    fill_color='YlOrRd',
+    fill_opacity=0.8,
+    line_opacity=0.3,
+    nan_fill_color='lightgrey',
+legend_name='world population'
+).add_to(m)
+folium.LayerControl().add_to(m)
+m
+
+import folium 
+import pandas as pd
+data=pd.read_csv('indian_popu.csv')
+print("Columns in DataFrame",data.column)
+print(data.head())
+data.column=data.column.str.strip()
+geojson="https://raw.githubusercontent.com/geohacker/india/master/state/india_telangana.geojson"
+
+m=folium.Map(locations=[20.5937,78.9629],zoom_starts=5)
+folium.Choropleth(
+    geo_data=geojson,
+    data=data,
+    columns=['Country code','Population'],
+    key_on='feature.properties.Name_1',
+    fill_color='YlOrRd',
+    fill_opacity=0.8,
+    line_opacity=0.3,
+legend_name='population of Indian States'
+).add_to(m)
+folium.LayerControl().add_to(m)
+m
